@@ -127,7 +127,8 @@ function mapItems(document) {
       categories: getItemCategories(item),
       published: getItemPublished(item),
       enclosures: getItemEnclosures(item),
-      itunes: itunesParser.parseItem(item)
+      itunes: itunesParser.parseItem(item),
+      media: getItemMedia(item)
     };
   });
 }
@@ -185,4 +186,15 @@ function getItemEnclosures(node) {
       mimeType: enclosure.getAttribute('type')
     }
   });
+}
+
+function getItemMedia(node) {
+    const media = utils.getChildElements(node, 'media:content');
+    let mapped = {}
+    media.forEach((item) => {
+        for(var i = 0; i < item.attributes.length; i++) {
+            mapped[item.attributes[i].name] = item.attributes[i].value;
+        }
+    })
+    return mapped;
 }
